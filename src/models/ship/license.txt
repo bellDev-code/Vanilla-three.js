@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pirate Lotr Ship
+* source:	https://sketchfab.com/3d-models/pirate-lotr-ship-6a06f52061d84ff9951ee57c7c5332be
+* author:	Mitro123 (https://sketchfab.com/Mitro123)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pirate Lotr Ship" (https://sketchfab.com/3d-models/pirate-lotr-ship-6a06f52061d84ff9951ee57c7c5332be) by Mitro123 (https://sketchfab.com/Mitro123) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
