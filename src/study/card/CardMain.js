@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import Card from "./Components/Card.js"
+import Card from "../Components/Card.js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import GUI from "lil-gui"
 import { gsap } from "gsap"
