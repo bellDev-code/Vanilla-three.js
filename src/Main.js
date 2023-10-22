@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Firework from "./FireWork"
 
 window.addEventListener('load', function() {
@@ -21,22 +20,32 @@ function init() {
         75,
         window.innerWidth / window.innerHeight,
         1,
-        500
+        10000
     )
 
-    camera.position.z = 5
+    camera.position.z = 8000
 
-    new OrbitControls(camera, renderer.domElement)
+    const fireworks = []
+
+    fireworks.update = function() {
+        for (let i = 0; i < this.length; i++) {
+            const firework = fireworks[i]
+            
+            firework.update()
+        }
+    }
 
     const firework = new Firework({ x: 0, y: 0})
     
     scene.add(firework.points)
+
+    fireworks.push(firework)
     
     render()
 
     function render() {
-        firework.update()
-        
+        fireworks.update()
+
         renderer.render(scene, camera)
 
         requestAnimationFrame(render)
@@ -55,4 +64,16 @@ function init() {
 
     window.addEventListener('resize', handleResize)
 
+    function handleMouseDown() {
+        const firework = new Firework({
+            x: THREE.MathUtils.randFloatSpread(8000),
+            y: THREE.MathUtils.randFloatSpread(8000)
+        })
+
+        scene.add(firework.points)
+
+        fireworks.push(firework)
+    }
+
+    window.addEventListener('mousedown', handleMouseDown)
 }
