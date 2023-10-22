@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import Firework from "./Firework.js"
 
 window.addEventListener('load', function() {
     init()
@@ -7,7 +7,6 @@ window.addEventListener('load', function() {
 
 function init() {
     const renderer = new THREE.WebGLRenderer({
-        // alpha: true
         antialias: true
     })
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -23,35 +22,30 @@ function init() {
         1,
         10000
     )
+
+    camera.position.z = 8000
+
+    const fireworks = []
+
+    fireworks.update = function() {
+        for (let i = 0; i < this.length; i++) {
+            const firework = fireworks[i]
+            
+            firework.update()
+        }
+    }
+
+    const firework = new Firework({ x: 0, y: 0})
     
-    camera.position.z = 5
+    scene.add(firework.points)
 
-    const controls = new OrbitControls(camera, renderer.domElement)
-
-    controls.minDistance = 5
-    controls.maxDistance = 1000
-
-    const textureloader = new THREE.TextureLoader().setPath("../src/assets/textures/Yocohama/")
-
-    const images = [
-        'posx.jpg', 'negx.jpg',
-        'posy.jpg', 'negy.jpg',
-        'posz.jpg', 'negz.jpg',
-    ]
-
-    const geometry = new THREE.BoxGeometry(5000, 5000, 5000)
-    const materials = images.map(image => new THREE.MeshBasicMaterial({
-        map: textureloader.load(image),
-        side: THREE.BackSide
-    }))
-
-    const skyBox = new THREE.Mesh(geometry, materials)
-
-    scene.add(skyBox)
+    fireworks.push(firework)
     
     render()
 
     function render() {
+        fireworks.update()
+
         renderer.render(scene, camera)
 
         requestAnimationFrame(render)
@@ -65,8 +59,21 @@ function init() {
         renderer.setSize(window.innerWidth, window.innerHeight)
 
         renderer.render()
+
     }
 
     window.addEventListener('resize', handleResize)
 
+    function handleMouseDown() {
+        const firework = new Firework({
+            x: THREE.MathUtils.randFloatSpread(8000),
+            y: THREE.MathUtils.randFloatSpread(8000)
+        })
+
+        scene.add(firework.points)
+
+        fireworks.push(firework)
+    }
+
+    window.addEventListener('mousedown', handleMouseDown)
 }
