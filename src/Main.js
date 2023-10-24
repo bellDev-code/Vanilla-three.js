@@ -55,6 +55,8 @@ async function init() {
     const gltfLoader = new GLTFLoader(loadingManager)
 
     const gltf = await gltfLoader.loadAsync('../src/models/3Dmodel/character.gltf')
+    
+    console.log(gltf, "gltf")
 
     const model = gltf.scene
 
@@ -63,6 +65,12 @@ async function init() {
     camera.lookAt(model.position)
 
     model.scale.set(0.1, 0.1, 0.1)
+
+    model.traverse(object => {
+        if(object.isMesh) {
+            object.castShadow = true
+        }
+    })
 
     const planeGeometry = new THREE.PlaneGeometry(10000, 10000, 10000)
     const planeMaterial = new THREE.MeshPhongMaterial({
@@ -73,6 +81,7 @@ async function init() {
     
     plane.rotation.x = -Math.PI / 2
     plane.position.y = -7.5
+    plane.receiveShadow = true
 
     scene.add(plane)
 
@@ -85,12 +94,32 @@ async function init() {
     const spotLight = new THREE.SpotLight(0xffffff, 30, Math.PI * 0.15, 0.5, 0.5)
 
     spotLight.position.set(0, 20, 0)
+    spotLight.castShadow = true
+    spotLight.shadow.mapSize.width = 1024
+    spotLight.shadow.mapSize.height = 1024
+    spotLight.shadow.radius = 8
 
     scene.add(spotLight)
+
+    const mixer = new THREE.AnimationMixer(model)
+
+    const hasAnimation = gltf.animations.length !== 0
+
+    if(hasAnimation) {
+        const action = mixer.clipAction(gltf.animations[0])
+
+        action.play()
+    }
+    
+    const clock = new THREE.Clock()
     
     render()
 
     function render() {
+        const delta = clock.getDelta()
+
+        mixer.update(delta)
+
         controls.update()
 
         renderer.render(scene, camera)
